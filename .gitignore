@@ -1,0 +1,46 @@
+# Fichiers ignorés
+
+# Environnements virtuels
+venv/
+.env/
+.env
+
+# Fichiers de cache Python
+__pycache__/
+*.py[cod]
+*.pyc
+
+# Fichiers de base de données
+*.sqlite3
+*.db
+
+# Fichiers de logs
+*.log
+
+# Fichiers de configuration sensible
+.env
+secrets.json
+
+# Fichiers de migration (optionnel, à utiliser avec précaution)
+makutano/migrations/
+
+# Fichiers de développement
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Fichiers statiques et médias (si vous utilisez un service externe comme AWS S3)
+staticfiles/
+media/
+
+# Fichiers de build
+build/
+dist/
+*.egg-info/
+
+# Fichiers macOS
+.DS_Store
+
+# Fichiers Windows
+Thumbs.db

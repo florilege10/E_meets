@@ -1,0 +1,11 @@
+Django
+djangorestframework
+dj-rest-auth
+django-allauth
+django-countries
+geopy
+Pillow
+python-dotenv
+channels
+channels_redis
+twilio
