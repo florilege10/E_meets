@@ -5,9 +5,12 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ✅ Secrets et configuration sensible
-SECRET_KEY = config('SECRET_KEY')  # Utilise une variable d'environnement pour la clé secrète
+
+SECRET_KEY = config('SECRET_KEY')  # Charge la SECRET_KEY depuis les variables d'environnement
 DEBUG = config('DEBUG', default=False, cast=bool)  # Désactive DEBUG en production
-ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1']  # Autorise les domaines Vercel
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='.vercel.app,127.0.0.1').split(',')  # Autorise les domaines Vercel et localhost
+
+
 
 # ✅ Applications Django de base
 INSTALLED_APPS = [
