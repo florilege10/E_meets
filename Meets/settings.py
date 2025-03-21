@@ -1,12 +1,12 @@
 from pathlib import Path
+from pathlib import Path
+from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'your-secret-key'
-
-DEBUG = True
-
-ALLOWED_HOSTS = []
+SECRET_KEY = config('defffmdfndmfndnsdmnsm')  # Utilise une variable d'environnement
+DEBUG = config('DEBUG', default=False, cast=bool)  # Désactive DEBUG en production
+ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1']  # Autorise les domaines Vercel
 
 # ✅ Applications Django de base
 INSTALLED_APPS = [
@@ -125,3 +125,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+CORS_ALLOW_ALL_ORIGINS = True  # À ajuster en production pour limiter les origines autorisées
