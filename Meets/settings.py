@@ -8,6 +8,7 @@ SECRET_KEY = config('defffmdfndmfndnsdmnsm')  # Utilise une variable d'environne
 DEBUG = config('DEBUG', default=False, cast=bool)  # Désactive DEBUG en production
 ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1']  # Autorise les domaines Vercel
 
+
 # ✅ Applications Django de base
 INSTALLED_APPS = [
     'django.contrib.admin',
