@@ -1,13 +1,13 @@
 from pathlib import Path
-from pathlib import Path
 from decouple import config
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = config('defffmdfndmfndnsdmnsm')  # Utilise une variable d'environnement
+# ✅ Secrets et configuration sensible
+SECRET_KEY = config('SECRET_KEY')  # Utilise une variable d'environnement pour la clé secrète
 DEBUG = config('DEBUG', default=False, cast=bool)  # Désactive DEBUG en production
 ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1']  # Autorise les domaines Vercel
-
 
 # ✅ Applications Django de base
 INSTALLED_APPS = [
@@ -17,17 +17,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     # ✅ Applications tierces
     'rest_framework',
-    'rest_framework.authtoken',  # Présent UNE SEULE FOIS
+    'rest_framework.authtoken',
     'corsheaders',
-    
-    # Apps tierces
+
+    # ✅ Apps tierces pour l'authentification
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    
+
     # ✅ Tes applications locales
     'makutano', 
 ]
@@ -44,7 +44,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
+
     # Middleware de django-allauth
     'allauth.account.middleware.AccountMiddleware',
 ]
@@ -66,27 +66,25 @@ TEMPLATES = [
     },
 ]
 
-# ✅ Base de données
+# ✅ Base de données (utiliser une DB externe en production comme PostgreSQL)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / "db.sqlite3",
+        'NAME': BASE_DIR / 'db.sqlite3',  # À remplacer par une DB de production comme PostgreSQL
     }
 }
 
 AUTH_USER_MODEL = 'makutano.Profile'
 
-
+# ✅ Paramètres d'authentification
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',  # Par défaut
+    'django.contrib.auth.backends.ModelBackend',
 ]
-
 
 # ✅ Configuration de Django Rest Framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-       # 'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -96,13 +94,15 @@ REST_FRAMEWORK = {
 # ✅ Static & Media files
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
+
+# Utiliser un stockage externe pour les fichiers statiques et médias (par exemple AWS S3)
 STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_ROOT = BASE_DIR / "media"
 
-# ✅ Configuration CORS (si nécessaire)
-CORS_ALLOW_ALL_ORIGINS = True  # À sécuriser en production !
+# ✅ CORS Configuration
+CORS_ALLOW_ALL_ORIGINS = True  # À ajuster en production pour limiter les origines autorisées
 
-# ✅ Configuration des emails (si nécessaire)
+# ✅ Paramètres de l'email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.example.com'
 EMAIL_PORT = 587
@@ -112,20 +112,17 @@ EMAIL_HOST_PASSWORD = 'your-password'
 
 # ✅ Configuration django-allauth
 ACCOUNT_LOGIN_METHODS = ['email']
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'sexe','password1*', 'password2*']
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # ou 'optional'
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'sexe', 'password1', 'password2']
+#ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Ou 'optional'
 
 
-from decouple import config
 
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=False, cast=bool)
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+# ✅ Variables d'environnement pour configuration de la DB et autres
+DATABASES['default'] = {
+    'ENGINE': config('DB_ENGINE', default='django.db.backends.sqlite3'),
+    'NAME': config('DB_NAME', default=BASE_DIR / 'db.sqlite3'),
+    'USER': config('DB_USER', default=''),
+    'PASSWORD': config('DB_PASSWORD', default=''),
+    'HOST': config('DB_HOST', default=''),
+    'PORT': config('DB_PORT', default=''),
 }
-
-
-CORS_ALLOW_ALL_ORIGINS = True  # À ajuster en production pour limiter les origines autorisées

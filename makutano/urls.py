@@ -1,3 +1,4 @@
+from django.http import HttpResponseNotFound
 from django.urls import path
 from .views import (
     RegistrationView, CustomLoginView, LoginView, UserView,
@@ -24,4 +25,6 @@ urlpatterns = [
     path('men/likes/', LikeCreateView.as_view(), name='like-create-men'),
     path('men/abonnements/', AbonnementCreateView.as_view(), name='abonnement-create-men'),
     path('men/messages/', MessageCreateView.as_view(), name='message-create-men'),
+
+    path('favicon.ico', lambda request: HttpResponseNotFound()),
 ]
