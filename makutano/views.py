@@ -16,7 +16,8 @@ class RegistrationView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         profile = serializer.save()
         return Response({'message': 'Utilisateur créé avec succès', 'user_id': profile.id}, status=status.HTTP_201_CREATED)
 
@@ -31,13 +32,35 @@ class CustomLoginView(ObtainAuthToken):
         return Response({'token': token.key, 'redirect_url': redirect_url}, status=status.HTTP_200_OK)
 
 # Vue pour la connexion des utilisateurs
-class LoginView(APIView):
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from .serializers import LoginSerializer
+from rest_framework.permissions import IsAuthenticated
+
+class LoginView(generics.GenericAPIView):
+    serializer_class = LoginSerializer
+    permission_classes = [permissions.AllowAny]
+
     def post(self, request, *args, **kwargs):
-        serializer = LoginSerializer(data=request.data, context={'request': request})
+        # Sérialiser les données de la requête
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
+        # Récupérer l'utilisateur valide
         user = serializer.validated_data['user']
+
+        # Obtenir ou créer un token
         token, _ = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key, 'user_id': user.id, 'email': user.email, 'message': 'Connexion réussie'}, status=status.HTTP_200_OK)
+
+        # Retourner la réponse avec le token et l'URL de redirection en fonction du sexe
+        redirect_url = '/men/publications/' if user.sexe == 'H' else '/women/publications/'
+        return Response({
+            'token': token.key,
+            'redirect_url': redirect_url
+        }, status=status.HTTP_200_OK)
+
+
 
 # Vue pour gérer les informations utilisateur (affichage et mise à jour)
 class UserView(generics.RetrieveUpdateAPIView):
@@ -128,3 +151,4 @@ class MessageCreateView(generics.CreateAPIView):
         if not self.request.user.abonnements.filter(is_active=True).exists():
             raise serializers.ValidationError("Vous devez avoir un abonnement actif pour envoyer un message.")
         serializer.save(sender=self.request.user)
+
