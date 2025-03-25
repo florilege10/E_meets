@@ -2,7 +2,7 @@ services:
   - type: web
     name: meets-api
     runtime: python
-    pythonVersion: "3.9.16"  # Version explicite
+    pythonVersion: "3.13 # Version explicite
     buildCommand: |
       pip install --upgrade pip
       pip install -r requirements.txt
