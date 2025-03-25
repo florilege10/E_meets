@@ -1,12 +1,18 @@
 from pathlib import Path
 import os
 import environ
+from pathlib import Path
+
 
 # Initialiser les variables d'environnement
 env = environ.Env()
-environ.Env.read_env()
+
+
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+environ.Env.read_env(env_file=str(BASE_DIR / '.env'))
 
 # ✅ Clé secrète depuis .env
 SECRET_KEY = env('SECRET_KEY')
@@ -128,3 +134,6 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='your-password')
 
 # ✅ WSGI
 WSGI_APPLICATION = 'Meets.wsgi.application'
+
+
+ROOT_URLCONF = 'Meets.urls'  # Remplace 'Meets' par le nom de ton projet si c'est différent
