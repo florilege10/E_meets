@@ -136,4 +136,4 @@ DATABASES['default'] = {
 }
 
 # api/settings.py
-WSGI_APPLICATION = 'Meets.wsgi.app'
+WSGI_APPLICATION = 'Meets.wsgi.application'
