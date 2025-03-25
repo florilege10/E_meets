@@ -1,30 +1,21 @@
 from pathlib import Path
-from decouple import config
 import os
-
 import environ
 
+# Initialiser les variables d'environnement
 env = environ.Env()
 environ.Env.read_env()
 
-
-
-
-
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ✅ Secrets et configuration sensible
+# ✅ Clé secrète depuis .env
+SECRET_KEY = env('SECRET_KEY')
 
-# settings.py
-SECRET_KEY = 'django-insecure-3x8%1y#p@z2!j^7q$e&5r^m6n(4+_m&y0@kz!o*lg=1v@+6b@'
+# ✅ Mode debug depuis .env
+DEBUG = env.bool('DEBUG', default=False)
 
-
-DEBUG = os.environ.get("DEBUG") != "False"
-
+# ✅ Hôtes autorisés
 ALLOWED_HOSTS = ['.vercel.app', '.now.sh', 'localhost', '127.0.0.1']
-
-
 
 # ✅ Applications Django de base
 INSTALLED_APPS = [
@@ -40,18 +31,16 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
 
-    # ✅ Apps tierces pour l'authentification
+    # ✅ Authentification
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
 
     "whitenoise.runserver_nostatic",
 
-    # ✅ Tes applications locales
+    # ✅ Apps locales
     'makutano', 
 ]
-
-ROOT_URLCONF = 'Meets.urls'
 
 # ✅ Middleware
 MIDDLEWARE = [
@@ -64,8 +53,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
-    # Middleware de django-allauth
+
+    # Middleware django-allauth
     'allauth.account.middleware.AccountMiddleware',
 ]
 
@@ -86,23 +75,29 @@ TEMPLATES = [
     },
 ]
 
-# ✅ Base de données (utiliser une DB externe en production comme PostgreSQL)
-
-
+# ✅ Configuration de la base de données avec ElephantSQL
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'Emeets',
-        'USER': 'postgres',
-        'PASSWORD': 'florilege18',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': env('DB_ENGINE', default='django.db.backends.postgresql_psycopg2'),
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
     }
 }
 
-
+# ✅ Gestion des fichiers statiques
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [BASE_DIR / "static"]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# ✅ Gestion des fichiers médias
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / "media"
+
+# ✅ Modèle utilisateur personnalisé
 AUTH_USER_MODEL = 'makutano.Profile'
 
 # ✅ Paramètres d'authentification
@@ -120,41 +115,16 @@ REST_FRAMEWORK = {
     ],
 }
 
-# ✅ Static & Media files
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
+# ✅ Configuration CORS
+CORS_ALLOW_ALL_ORIGINS = True  # À ajuster en production
 
-# Utiliser un stockage externe pour les fichiers statiques et médias (par exemple AWS S3)
-STATICFILES_DIRS = [BASE_DIR / "static"]
-MEDIA_ROOT = BASE_DIR / "media"
-
-# ✅ CORS Configuration
-CORS_ALLOW_ALL_ORIGINS = True  # À ajuster en production pour limiter les origines autorisées
-
-# ✅ Paramètres de l'email
+# ✅ Configuration e-mail
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.example.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'your-email@example.com'
-EMAIL_HOST_PASSWORD = 'your-password'
+EMAIL_HOST = env('EMAIL_HOST', default='smtp.example.com')
+EMAIL_PORT = env.int('EMAIL_PORT', default=587)
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default=True)
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='your-email@example.com')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='your-password')
 
-# ✅ Configuration django-allauth
-ACCOUNT_LOGIN_METHODS = ['email']
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'sexe', 'password1', 'password2']
-#ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Ou 'optional'
-
-
-
-# ✅ Variables d'environnement pour configuration de la DB et autres
-DATABASES['default'] = {
-    'ENGINE': config('DB_ENGINE', default='django.db.backends.sqlite3'),
-    'NAME': config('DB_NAME', default=BASE_DIR / 'db.sqlite3'),
-    'USER': config('DB_USER', default=''),
-    'PASSWORD': config('DB_PASSWORD', default=''),
-    'HOST': config('DB_HOST', default=''),
-    'PORT': config('DB_PORT', default=''),
-}
-
-# api/settings.py
+# ✅ WSGI
 WSGI_APPLICATION = 'Meets.wsgi.application'

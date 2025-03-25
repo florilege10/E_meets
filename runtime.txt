@@ -1,4 +1,4 @@
-python-3.9
+python-3.12
 
 git add runtime.txt
 git commit -m "Correction runtime Python 3.9"
