@@ -6,9 +6,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ✅ Secrets et configuration sensible
 
-SECRET_KEY = config('SECRET_KEY')  # Charge la SECRET_KEY depuis les variables d'environnement
-DEBUG = config('DEBUG', default=False, cast=bool)  # Désactive DEBUG en production
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='.vercel.app,127.0.0.1').split(',')  # Autorise les domaines Vercel et localhost
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
+DEBUG = os.environ.get("DEBUG") != "False"
+
+ALLOWED_HOSTS = [".vercel.app", ".now.sh"]
 
 
 
@@ -31,6 +33,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
 
+    "whitenoise.runserver_nostatic",
+
     # ✅ Tes applications locales
     'makutano', 
 ]
@@ -40,6 +44,7 @@ ROOT_URLCONF = 'Meets.urls'
 # ✅ Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -129,3 +134,6 @@ DATABASES['default'] = {
     'HOST': config('DB_HOST', default=''),
     'PORT': config('DB_PORT', default=''),
 }
+
+# api/settings.py
+WSGI_APPLICATION = 'Meets.wsgi.app'

@@ -1,26 +1,30 @@
+
+
+
 {
   "version": 2,
   "builds": [
     {
       "src": "Meets/wsgi.py",
       "use": "@vercel/python",
+      "config": {"maxLambdaSize": "15mb", "runtime": "python3.x"}
+    },
+    {
+      "src": "build_files.sh",
+      "use": "@vercel/static-build",
       "config": {
-        "maxLambdaSize": "50mb"
+        "distDir": "staticfiles"
       }
     }
   ],
   "routes": [
     {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
-    {
-      "src": "/media/(.*)",
-      "dest": "/media/$1"
-    },
-    {
       "src": "/(.*)",
       "dest": "Meets/wsgi.py"
+    },
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
     }
   ]
 }
