@@ -1,4 +1,8 @@
-# build_files.sh
+#!/bin/bash
+set -e  # Arrête l'exécution en cas d'erreur
 
+# Installer les dépendances
 pip install -r requirements.txt
-python3.x manage.py collectstatic --no-input --clear
+
+# Collecter les fichiers statiques
+python manage.py collectstatic --noinput
