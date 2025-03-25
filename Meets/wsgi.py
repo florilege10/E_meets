@@ -15,5 +15,5 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Meets.settings')
 
 application = get_wsgi_application()
 
-# api/wsgi.py
+
 
