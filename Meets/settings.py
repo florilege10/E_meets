@@ -15,13 +15,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(env_file=str(BASE_DIR / '.env'))
 
 # ✅ Clé secrète depuis .env
-SECRET_KEY = env('SECRET_KEY')
+
+SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key')  # Ne jamais laisser une valeur par défaut en prod !
+
 
 # ✅ Mode debug depuis .env
 DEBUG = env.bool('DEBUG', default=False)
 
 # ✅ Hôtes autorisés
-ALLOWED_HOSTS = ['.vercel.app', '.now.sh', 'localhost', '127.0.0.1', '.onrender.com'] 
+ALLOWED_HOSTS = ['meets-api.onrender.com', 'localhost', '127.0.0.1']
 
 # ✅ Applications Django de base
 INSTALLED_APPS = [
