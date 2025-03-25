@@ -2,11 +2,23 @@ from pathlib import Path
 from decouple import config
 import os
 
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
+
+
+
+
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ✅ Secrets et configuration sensible
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
+# settings.py
+SECRET_KEY = 'django-insecure-3x8%1y#p@z2!j^7q$e&5r^m6n(4+_m&y0@kz!o*lg=1v@+6b@'
+
 
 DEBUG = os.environ.get("DEBUG") != "False"
 
@@ -75,12 +87,19 @@ TEMPLATES = [
 ]
 
 # ✅ Base de données (utiliser une DB externe en production comme PostgreSQL)
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',  # À remplacer par une DB de production comme PostgreSQL
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'Emeets',
+        'USER': 'postgres',
+        'PASSWORD': 'florilege18',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
+
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
