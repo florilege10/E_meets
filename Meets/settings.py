@@ -82,6 +82,8 @@ DATABASES = {
     }
 }
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 AUTH_USER_MODEL = 'makutano.Profile'
 
 # ✅ Paramètres d'authentification
