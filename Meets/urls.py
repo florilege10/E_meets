@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 from makutano.views import *
 
 urlpatterns = [
-    path('', home, name='home'), 
+    path('/', home, name='home'), 
     path('admin/', admin.site.urls),
        path('', home, name='home'), 
     # URLs communes
