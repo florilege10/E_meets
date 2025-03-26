@@ -10,8 +10,8 @@ urlpatterns = [
 
     path('', home, name='home'), 
     # URLs communes
-    path('register', RegistrationView.as_view(), name='register'),
-    path('login', LoginView.as_view(), name='login'),
+    path('register/', RegistrationView.as_view(), name='register'),
+    path('login/', LoginView.as_view(), name='login'),
     path('custom-login/', CustomLoginView.as_view(), name='custom-login'),
     path('user/<int:pk>/', UserView.as_view(), name='user-detail'),
     
