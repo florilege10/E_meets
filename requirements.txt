@@ -10,3 +10,4 @@ django-twilio
 drf-yasg
 twilio
 requests
+dj-database-url==2.1.0 
