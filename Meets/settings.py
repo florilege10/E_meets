@@ -139,3 +139,11 @@ WSGI_APPLICATION = 'Meets.wsgi.application'
 
 
 ROOT_URLCONF = 'Meets.urls'  # Remplace 'Meets' par le nom de ton projet si c'est différent
+
+
+
+
+# Sécurité
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
