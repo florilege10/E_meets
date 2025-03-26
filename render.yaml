@@ -2,12 +2,12 @@ services:
   - type: web
     name: meets-api
     runtime: python
-    pythonVersion: "3.9.16"
+    pythonVersion: "3.13"
     buildCommand: |
       python -m pip install --upgrade pip
       pip install -r requirements.txt
       python manage.py collectstatic --noinput
-    startCommand: gunicorn Meets.wsgi:application --workers 2
+    startCommand: bash -c "gunicorn Meets.wsgi:application --workers 2 --bind 0.0.0.0:$PORT"
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: Meets.settings
@@ -17,3 +17,5 @@ services:
         value: "meets-api.onrender.com"
       - key: PYTHONPATH
         value: "/opt/render/project/src"
+      - key: PORT
+        value: "10000"
