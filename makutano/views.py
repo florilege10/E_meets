@@ -12,31 +12,35 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from .serializers import RegistrationSerializer
 
-# Vue pour l'inscription des utilisateurs
+import logging
+from rest_framework.response import Response
+from rest_framework import generics, permissions, status
+from .serializers import RegistrationSerializer
+
+logger = logging.getLogger(__name__)
+
 class RegistrationView(generics.CreateAPIView):
     serializer_class = RegistrationSerializer
     permission_classes = [permissions.AllowAny]
 
-    # Méthode POST pour gérer l'inscription
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
 
-        # Vérification de la validité des données envoyées
         if not serializer.is_valid():
+            logger.error(f"Validation échouée : {serializer.errors}")  # Log d'erreur
             return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            # Enregistrement du profil utilisateur
             profile = serializer.save()
+            logger.info(f"Utilisateur créé : {profile.email}")  # Log succès
         except Exception as e:
-            # Gestion des erreurs internes (ex : problème de base de données)
+            logger.error(f"Erreur interne : {str(e)}", exc_info=True)  # Log d'erreur complet
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         return Response({
             'message': 'Utilisateur créé avec succès',
             'user_id': profile.id
         }, status=status.HTTP_201_CREATED)
-
 
 # Vue personnalisée pour la connexion des utilisateurs
 class CustomLoginView(ObtainAuthToken):
