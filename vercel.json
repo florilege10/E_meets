@@ -9,8 +9,10 @@
   "routes": [
     { "src": "/static/(.*)", "dest": "/static/$1" },
     { 
-      "src": "/(.*)", 
-      "dest": "Meets/asgi.py",
+      
+    
+      "src": "/(.*)",
+      "dest": "makutano/apps.py",
       "headers": { "Content-Type": "text/html" } 
     }
   ]
