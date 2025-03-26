@@ -69,34 +69,68 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',  # Plus permissif pour l'inscription
     ],
 }
+# ==============================================
+# Configuration CORS et Sécurité
+# ==============================================
 
-# CORS
+# CORS (Cross-Origin Resource Sharing)
 CORS_ALLOWED_ORIGINS = [
     "https://makutano.onrender.com",
     "http://localhost:3000",
+    "http://127.0.0.1:3000",  # Pour le développement local
 ]
+CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 CORS_ALLOW_CREDENTIALS = True
+
+# Configuration CSRF
+CSRF_TRUSTED_ORIGINS = [
+    'https://makutano.onrender.com',
+    'https://*.onrender.com'
+]
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_HTTPONLY = False  # Nécessaire pour les APIs
+CSRF_USE_SESSIONS = False
+CSRF_COOKIE_SECURE = True  # HTTPS seulement
+
+# ==============================================
+# Configuration des fichiers statiques et média
+# ==============================================
 
 # Fichiers statiques
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Dossier source pour collectstatic
+
+# Configuration WhiteNoise optimisée
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+WHITENOISE_MAX_AGE = 31536000  # Cache pour 1 an
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_MANIFEST_STRICT = False
 
 # Fichiers média
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Sécurité
+# ==============================================
+# Sécurité renforcée
+# ==============================================
+
 if not DEBUG:
+    # HTTPS
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    
+    # Cookies
     SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-
-CSRF_TRUSTED_ORIGINS = ['https://makutano.onrender.com']
-CSRF_COOKIE_SAMESITE = 'Lax'
-CSRF_COOKIE_HTTPONLY = False
-CSRF_USE_SESSIONS = False
+    SESSION_COOKIE_SAMESITE = 'Lax'
+    
+    # Protection diverses
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+    X_FRAME_OPTIONS = 'DENY'
 
 # Internationalisation
 LANGUAGE_CODE = 'fr-fr'

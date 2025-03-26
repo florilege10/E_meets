@@ -59,6 +59,31 @@ class LoginView(generics.GenericAPIView):
             'token': token.key,
             'redirect_url': redirect_url
         }, status=status.HTTP_200_OK)
+    
+
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+@api_view(['GET'])
+def home(request):
+    return Response({
+        "message": "Bienvenue sur Makutano API",
+        "endpoints": {
+            "inscription": "/api/register/",
+            "connexion": "/api/login/",
+            "documentation": "À implémenter",
+            "pour_les_hommes": {
+                "publications": "/api/men/publications/",
+                "photos": "/api/men/photos/",
+                "abonnements": "/api/men/abonnements/"
+            },
+            "pour_les_femmes": {
+                "publications": "/api/women/publications/",
+                "photos": "/api/women/photos/"
+            }
+        }
+    })
 
 
 

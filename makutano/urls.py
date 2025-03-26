@@ -3,10 +3,12 @@ from django.urls import path
 from .views import (
     RegistrationView, CustomLoginView, LoginView, UserView,
     PublicationListForWomenView, PhotoListForWomenView, LikeListForWomenView, MessageListForWomenView,
-    PublicationListForMenView, PhotoListForMenView, LikeCreateView, AbonnementCreateView, MessageCreateView
+    PublicationListForMenView, PhotoListForMenView, LikeCreateView, AbonnementCreateView, MessageCreateView, home
 )
 
 urlpatterns = [
+
+    path('', home, name='home'), 
     # URLs communes
     path('register/', RegistrationView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
