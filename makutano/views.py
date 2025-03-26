@@ -17,13 +17,6 @@ class RegistrationView(generics.CreateAPIView):
     serializer_class = RegistrationSerializer
     permission_classes = [permissions.AllowAny]
 
-    # Méthode GET pour fournir des informations sur l'inscription
-    def get(self, request, *args, **kwargs):
-        return Response({
-            'message': 'Utilisez une méthode POST pour vous inscrire.',
-            'documentation': 'Envoyez une requête POST avec les données d\'inscription.'
-        }, status=status.HTTP_200_OK)
-
     # Méthode POST pour gérer l'inscription
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
