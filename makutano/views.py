@@ -8,26 +8,42 @@ from .serializers import *
 from .permissions import IsMan, IsOwnerOrReadOnly, IsWoman, HasActiveAbonnement
 
 # VUES COMMUNES
+from rest_framework import generics, permissions, status
+from rest_framework.response import Response
+from .serializers import RegistrationSerializer
 
 # Vue pour l'inscription des utilisateurs
 class RegistrationView(generics.CreateAPIView):
     serializer_class = RegistrationSerializer
     permission_classes = [permissions.AllowAny]
 
+    # Méthode GET pour fournir des informations sur l'inscription
     def get(self, request, *args, **kwargs):
-        # Si vous souhaitez retourner des informations de l'API, comme un message ou un formulaire de description
         return Response({
             'message': 'Utilisez une méthode POST pour vous inscrire.',
             'documentation': 'Envoyez une requête POST avec les données d\'inscription.'
         }, status=status.HTTP_200_OK)
 
-
+    # Méthode POST pour gérer l'inscription
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
+
+        # Vérification de la validité des données envoyées
         if not serializer.is_valid():
             return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-        profile = serializer.save()
-        return Response({'message': 'Utilisateur créé avec succès', 'user_id': profile.id}, status=status.HTTP_201_CREATED)
+        
+        try:
+            # Enregistrement du profil utilisateur
+            profile = serializer.save()
+        except Exception as e:
+            # Gestion des erreurs internes (ex : problème de base de données)
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        return Response({
+            'message': 'Utilisateur créé avec succès',
+            'user_id': profile.id
+        }, status=status.HTTP_201_CREATED)
+
 
 # Vue personnalisée pour la connexion des utilisateurs
 class CustomLoginView(ObtainAuthToken):
