@@ -1,19 +1,31 @@
-
 {
   "version": 2,
-  "builds": [{
-    "src": "Meets/asgi.py",
-    "use": "@vercel/python",
-    "config": { "runtime": "python3.9" }
-  }],
+  "builds": [
+    {
+      "src": "Meets/wsgi.py",
+      "use": "@vercel/python",
+      "config": {
+        "runtime": "python3.9",
+        "maxLambdaSize": "15mb"
+      }
+    }
+  ],
   "routes": [
-    { "src": "/static/(.*)", "dest": "/static/$1" },
-    { 
-      
-    
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/media/(.*)", 
+      "dest": "/media/$1"
+    },
+    {
+      "src": "/admin(.*)",
+      "dest": "Meets/wsgi.py"
+    },
+    {
       "src": "/(.*)",
-      "dest": "makutano/apps.py",
-      "headers": { "Content-Type": "text/html" } 
+      "dest": "Meets/wsgi.py"
     }
   ]
 }
