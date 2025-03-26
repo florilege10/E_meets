@@ -96,7 +96,7 @@ DATABASES = {
 
 # ✅ Gestion des fichiers statiques
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -142,7 +142,8 @@ ROOT_URLCONF = 'Meets.urls'  # Remplace 'Meets' par le nom de ton projet si c'es
 
 
 
-# Sécurité
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
