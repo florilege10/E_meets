@@ -13,7 +13,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')  # Obligatoire en production
 
 
 DEBUG = env.bool('DEBUG', default=False)
-ALLOWED_HOSTS = ['makutano.onrender.com', 'localhost', '127.0.0.1','.vercel.app', 'rencontres-izlbiiiuz-joshuas-projects-b308ab41.vercel.app']
+ALLOWED_HOSTS = ['makutano.onrender.com', 'localhost', '127.0.0.1','.vercel.app', 'rencontres-mz5wgndo6-joshuas-projects-b308ab41.vercel.app']
 
 # Applications
 INSTALLED_APPS = [
