@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 2,
   "builds": [{
     "src": "Meets/asgi.py",
     "use": "@vercel/python",
@@ -9,7 +9,9 @@
     }
   }],
   "routes": [{
-    "src": "/(.*)",
+    "src": "/api/(.*)",
     "dest": "Meets/asgi.py"
   }]
 }
+
+
