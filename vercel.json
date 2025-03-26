@@ -1,14 +1,15 @@
 {
-  "version": 2,
-  "builds": [],
-  "routes": [
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "Meets/wsgi.py"
+  "version": 4,
+  "builds": [{
+    "src": "Meets/asgi.py",
+    "use": "@vercel/python",
+    "config": {
+      "runtime": "python3.9",
+      "cmd": "uvicorn Meets.asgi:application --host 0.0.0.0 --port 8000"
     }
-  ]
+  }],
+  "routes": [{
+    "src": "/(.*)",
+    "dest": "Meets/asgi.py"
+  }]
 }

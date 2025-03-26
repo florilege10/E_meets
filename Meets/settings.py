@@ -1,7 +1,8 @@
 from pathlib import Path
 import os
 import environ
-from pathlib import Path
+
+import dj_database_url
 
 
 # Initialiser les variables d'environnement
@@ -84,16 +85,14 @@ TEMPLATES = [
 ]
 
 # ✅ Configuration de la base de données avec ElephantSQL
+# Replace the SQLite DATABASES configuration with PostgreSQL:
 DATABASES = {
-    'default': {
-        'ENGINE': env('DB_ENGINE', default='django.db.backends.postgresql_psycopg2'),
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST'),
-        'PORT': env('DB_PORT'),
-    }
+    'default': dj_database_url.config(
+        default=os.getenv("DATABASE_URL"),  # Récupère l'URL de la base depuis Render
+        conn_max_age=600
+    )
 }
+
 
 # ✅ Gestion des fichiers statiques
 STATIC_URL = '/static/'
