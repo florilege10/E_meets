@@ -10,6 +10,8 @@ environ.Env.read_env(env_file=str(BASE_DIR / '.env'))
 
 # Configuration de base
 SECRET_KEY = os.getenv('SECRET_KEY')  # Obligatoire en production
+
+
 DEBUG = env.bool('DEBUG', default=False)
 ALLOWED_HOSTS = ['makutano.onrender.com', 'localhost', '127.0.0.1']
 
